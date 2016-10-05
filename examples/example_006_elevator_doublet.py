@@ -81,7 +81,7 @@ print()
 
 my_simulation = BatchSimulation(trimmed_ac, trimmed_sys, trimmed_env)
 
-tfin = 10  # seconds
+tfin = 20  # seconds
 N = tfin * 100 + 1
 time = np.linspace(0, tfin, N)
 initial_controls = trimmed_ac.controls
@@ -92,23 +92,23 @@ for control_name, control_value in initial_controls.items():
 
 # Elevator doublet 
 # Elevator travel: +28º/-26º
-amplitude = np.deg2rad(20)
-controls['delta_elevator'] = doublet(t_init=2,
-                                     T=1,
+amplitude = np.deg2rad(50)
+controls['delta_elevator'] = initial_controls['delta_elevator'] + \
+                             doublet(t_init=2,
+                                     T=2,
                                      A=amplitude,
                                      time=time,
-#                                     offset=initial_controls['delta_elevator'])
-                                     offset=np.deg2rad(1.0))
+                                     offset=0.0)
 
 my_simulation.set_controls(time, controls)
 
 par_list = ['x_earth', 'y_earth', 'height',
             'psi', 'theta', 'phi',
             'u', 'v', 'w',
-#            'v_north', 'v_east', 'v_down',
+            'v_north', 'v_east', 'v_down',
             'p', 'q', 'r',
             'alpha', 'beta', 'TAS',
-#            'F_xb', 'F_yb', 'F_zb',
+            'F_xb', 'F_yb', 'F_zb',
             'M_xb', 'M_yb', 'M_zb']
 
 my_simulation.set_par_dict(par_list)

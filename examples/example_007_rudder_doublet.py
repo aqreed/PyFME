@@ -102,13 +102,13 @@ controls['delta_rudder'] = doublet(t_init=2,
 
 my_simulation.set_controls(time, controls)
 
-par_list = [#'x_earth', 'y_earth', 'height',
+par_list = ['x_earth', 'y_earth', 'height',
             'psi', 'theta', 'phi',
             'u', 'v', 'w',
-#            'v_north', 'v_east', 'v_down',
+            'v_north', 'v_east', 'v_down',
             'p', 'q', 'r',
             'alpha', 'beta', 'TAS',
-#            'F_xb', 'F_yb', 'F_zb',
+            'F_xb', 'F_yb', 'F_zb',
             'M_xb', 'M_yb', 'M_zb']
 
 my_simulation.set_par_dict(par_list)

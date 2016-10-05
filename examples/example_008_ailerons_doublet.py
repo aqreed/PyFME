@@ -94,12 +94,10 @@ for control_name, control_value in initial_controls.items():
 # Aileron travel: +20º/-15º
 amplitude = np.deg2rad(15)
 controls['delta_aileron'] = doublet(t_init=2,
-                                    T=1,
+                                    T=2,
                                     A=amplitude,
                                     time=time,
-                                    offset=np.deg2rad(2.5))
-#                                     offset=initial_controls['delta_aileron'])
-
+                                    offset=np.deg2rad(0))
 
 my_simulation.set_controls(time, controls)
 
