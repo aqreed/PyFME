@@ -7,11 +7,13 @@ Distributed under the terms of the MIT License.
 Inputs generator
 ----------------
 Provides some typical inputs signals such as: step, doublet, ramp, harmonic.
+Also, a 1st order transfer function is applied to the signals of the step, 
+doublet and ramp.
 """
 import numpy as np
 
 
-def step(t_init, T, A, time, offset=0, var=None):
+def step(t_init, T, A, time, offset=0, var=None, tau=0.6):
     """ Step input.
 
     Parameters
@@ -29,6 +31,7 @@ def step(t_init, T, A, time, offset=0, var=None):
     var : array_like, opt
         Array containing previous perturbations. Signal will be added to
         this one.
+    tau : time constant associated to a 1st order transfer function
 
     Returns
     -------
@@ -43,11 +46,15 @@ def step(t_init, T, A, time, offset=0, var=None):
         else:
             raise ValueError('var and time must have the same size')
 
-    step_input[(time >= t_init) & (time <= t_init + T)] += A + float(offset)
+    condition = (time >= t_init) & (time <= t_init + T)
+    time_input = time[condition]
+
+    step_input[condition] += A + float(offset)
+    step_input[condition] *= (1 - np.exp(-(time_input - t_init)/tau))
     return step_input
 
 
-def doublet(t_init, T, A, time, offset=0, var=None):
+def doublet(t_init, T, A, time, offset=0, var=None, tau=0.6):
     """ Doublet input.
 
     Parameters
@@ -65,6 +72,7 @@ def doublet(t_init, T, A, time, offset=0, var=None):
     var : array_like, opt
         Array containing previous perturbations. Signal will be added to
         this one.
+    tau : time constant associated to a 1st order transfer function
 
     Returns
     -------
@@ -80,14 +88,18 @@ def doublet(t_init, T, A, time, offset=0, var=None):
             raise ValueError('var and time must have the same size')
 
     part_1 = (time >= t_init) & (time <= t_init + T / 2)
+    time_input_1 = time[part_1]
     doublet_input[part_1] += A / 2 + float(offset)
+    doublet_input[part_1] *= (1 - np.exp(-(time_input_1 - t_init)/tau))
 
     part_2 = (time > t_init + T / 2) & (time <= t_init + T)
+    time_input_2 = time[part_2]
     doublet_input[part_2] += - A / 2 + float(offset)
+    doublet_input[part_2] *= (1 - np.exp(-(time_input_2 - t_init - T / 2)/tau))
     return doublet_input
 
 
-def ramp(t_init, T, A, time, offset=0, var=None):
+def ramp(t_init, T, A, time, offset=0, var=None, tau=0.6):
     """ Ramp input
 
     Parameters
@@ -105,6 +117,7 @@ def ramp(t_init, T, A, time, offset=0, var=None):
     var : array_like, opt
         Array containing previous perturbations. Signal will be added to
         this one.
+    tau : time constant associated to a 1st order transfer function
 
     Returns
     -------
@@ -119,9 +132,10 @@ def ramp(t_init, T, A, time, offset=0, var=None):
         else:
             raise ValueError('var and time must have the same size')
 
-    time_input = time[(time >= t_init) & (time <= t_init + T)]
     condition = (time >= t_init) & (time <= t_init + T)
+    time_input = time[condition]
     ramp_input[condition] += (A / T) * (time_input - t_init) + float(offset)
+    ramp_input[condition] *= (1 - np.exp(-(time_input - t_init)/tau))
     return ramp_input
 
 
