@@ -87,9 +87,6 @@ def doublet(t_init, T, A, time, offset=0, var=None):
     doublet_input[part_2] += - A / 2 + float(offset)
     return doublet_input
 
-    time_input = time[(time >= t_init) & (time <= t_init + T)]
-
-
 
 def ramp(t_init, T, A, time, offset=0, var=None):
     """ Ramp input
