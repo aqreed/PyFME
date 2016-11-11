@@ -179,6 +179,7 @@ def harmonic(t_init, T, A, time, f, phase=0, offset=0, var=None):
     harmonic_input[(time >= t_init) & (time <= t_init + T)] += \
         A / 2 * np.sin(2 * np.pi * f * (time_input - t_init) + phase) + \
         float(offset)
+
     return harmonic_input
 
 
@@ -209,4 +210,5 @@ def sinusoid(t_init, T, A, time, phase=0, offset=0, var=None):
     """
     output = harmonic(t_init, T, A, time, f=1/T, phase=phase, offset=offset,
                       var=var)
+
     return output
